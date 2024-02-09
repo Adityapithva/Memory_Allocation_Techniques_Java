@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.util.Map;
+import java.util.HashMap;
 public class Main{
     public static int nextId = 1;
     public static void add_process(int pre_run_process,Process[] p,int[] array_ram,Scanner sc){
@@ -49,10 +51,59 @@ public class Main{
                 }
             }
         }
-        // Print RAM after allocation
         print_ram(array_ram);
     }
-    
+    public static void Best_Fit(Scanner sc,int id,int[] array_ram,E_process[] ep){
+        System.out.print("Enter number of processes you want to add:");
+        int a_p = sc.nextInt();
+        for(int i=0;i<a_p;i++){
+            System.out.print("Enter size of process "+(i+1)+":");
+            int size = sc.nextInt();
+            id = nextId++;
+            ep[i] = new E_process(size,id);
+        }
+        Map<Integer,Integer>available_blocks = new HashMap<>();
+        int startAddress = 0;
+        for(int i = 0; i<array_ram.length;i++){
+            if(array_ram[i] == 0){
+                int blockSize = 0;
+                int start = i;
+                while(i<array_ram.length && array_ram[i] == 0){
+                    blockSize++;
+                    i++;
+                }
+                if(blockSize > 0){
+                    available_blocks.put(start,blockSize);
+                }
+            }
+        }
+        for(int i=0;i<a_p;i++){
+            int processSize = ep[i].getsize();
+            int allocateStart = allocateBestFit(available_blocks, processSize);
+            if(allocateStart != -1){
+                for(int j=allocateStart;j<allocateStart+processSize;j++){
+                    array_ram[j] = ep[i].getid();
+                }
+                available_blocks.remove(allocateStart);
+            }else{
+                System.out.println("Memory allocation failed for process "+ep[i].getid()+". No suitable block is available");
+            }
+        }
+        print_ram(array_ram);
+    }
+    private static int allocateBestFit(Map<Integer,Integer>available_blocks,int processSize){
+        int bestFitStart = 0;
+        int bestFitSize = Integer.MAX_VALUE;
+        for(Map.Entry<Integer,Integer> entry : available_blocks.entrySet()){
+            int blockStart = entry.getKey();
+            int blockSize = entry.getValue();
+            if(blockSize >= processSize && blockSize < bestFitSize){
+                bestFitStart = blockStart;
+                bestFitSize = blockSize;
+            }
+        }
+        return bestFitStart;
+    }
     public static void main(String[] args) {
         Process[] p = new Process[100];
         Scanner sc = new Scanner(System.in);
@@ -65,7 +116,7 @@ public class Main{
         add_process(pre_run_process, p, array_ram, sc);
         print_ram(array_ram);
         while(true){
-            System.out.println("1)Allocation in First Fit");
+            System.out.println("\n1)Allocation in First Fit");
             System.out.println("2)Allocation in Best Fit");
             System.out.println("3)Allocation in Worst Fit");
             System.out.println("4)Exit");
@@ -75,10 +126,12 @@ public class Main{
                     First_Fit(sc,array_ram,ep);
                     break;
                 case 2:
+                    Best_Fit(sc, choice, array_ram, ep);
                     break;
                 case 3:
                     break;
                 case 4:
+                    System.exit(0);
                     break;
                 default:
                     System.out.println("Invalid choice");
