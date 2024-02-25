@@ -161,32 +161,38 @@ public class Main{
         E_process[] ep = new E_process[100];
         System.out.print("Enter no. of pre-running processes:");
         int pre_run_process = sc.nextInt();
-        add_process(pre_run_process, p, array_ram, sc);
-        print_ram(array_ram);
-        while(true){
-            System.out.println("\n1)Allocation in First Fit");
-            System.out.println("2)Allocation in Best Fit");
-            System.out.println("3)Allocation in Worst Fit");
-            System.out.println("4)Exit");
-            System.out.print("Enter your choice:");
-            int choice = sc.nextInt();
-            switch(choice){
-                case 1:
-                    First_Fit(sc,array_ram,ep);
-                    break;
-                case 2:
-                    Best_Fit(sc, choice, array_ram, ep);
-                    break;
-                case 3:
-                Worst_fit(sc, choice, array_ram, ep);
-                    break;
-                case 4:
-                    System.exit(0);
-                    break;
-                default:
-                    System.out.println("Invalid choice");
-                    break;
+        try{
+            add_process(pre_run_process, p, array_ram, sc);
+            print_ram(array_ram);
+            while(true){
+                System.out.println("\n1)Allocation in First Fit");
+                System.out.println("2)Allocation in Best Fit");
+                System.out.println("3)Allocation in Worst Fit");
+                System.out.println("4)Exit");
+                System.out.print("Enter your choice:");
+                int choice = sc.nextInt();
+                switch(choice){
+                    case 1:
+                        First_Fit(sc,array_ram,ep);
+                        break;
+                    case 2:
+                        Best_Fit(sc, choice, array_ram, ep);
+                        break;
+                    case 3:
+                    Worst_fit(sc, choice, array_ram, ep);
+                        break;
+                    case 4:
+                        System.exit(0);
+                        break;
+                    default:
+                        System.out.println("Invalid choice");
+                        break;
+                }
             }
+        }catch(Exception e){
+            System.out.println("An error occured :"+e.getMessage());
+        }finally{
+            sc.close();
         }
     }
 }
