@@ -152,6 +152,24 @@ public class Main{
         }
         return worstFitStart;
     }
+    public static void compact_memory(int[] array_ram){
+        int id = 0;
+        for(int i=0;i<array_ram.length;i++){
+            if(array_ram[i]!=0){
+                array_ram[id++] = array_ram[i];
+            }
+        }
+        for(int i=id;i<array_ram.length;i++){
+            array_ram[i] = 0;
+        }
+    }
+    public static void release_memory(int processId,int[] array_ram){
+        for(int i=0;i<array_ram.length;i++){
+            if(array_ram[i] == processId){
+                array_ram[i] = 0;
+            }
+        }
+    }
     public static void main(String[] args) {
         Process[] p = new Process[100];
         Scanner sc = new Scanner(System.in);
@@ -168,7 +186,9 @@ public class Main{
                 System.out.println("\n1)Allocation in First Fit");
                 System.out.println("2)Allocation in Best Fit");
                 System.out.println("3)Allocation in Worst Fit");
-                System.out.println("4)Exit");
+                System.out.println("4)Compact Memory");
+                System.out.println("5)Release Memory for Process:");
+                System.out.println("6)Exit");
                 System.out.print("Enter your choice:");
                 int choice = sc.nextInt();
                 switch(choice){
@@ -182,6 +202,16 @@ public class Main{
                     Worst_fit(sc, choice, array_ram, ep);
                         break;
                     case 4:
+                        compact_memory(array_ram);
+                        print_ram(array_ram);
+                        break;
+                    case 5:
+                        System.out.print("Enter process id to release memory:");
+                        int processId = sc.nextInt();
+                        release_memory(processId, array_ram);
+                        print_ram(array_ram);
+                        break;
+                    case 6:
                         System.exit(0);
                         break;
                     default:
