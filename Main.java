@@ -6,8 +6,8 @@ public class Main{
     public static void add_process(int pre_run_process,Process[] p,int[] array_ram,Scanner sc){
         for(int i=0;i<pre_run_process;i++){
             System.out.println("Enter details of process "+(i+1)+" (size,start_address):");
-            int size = sc.nextInt();
-            int startaddress = sc.nextInt();
+            int size = checkNegativeInput(sc);
+            int startaddress = checkNegativeInput(sc);
             int id = nextId++;
             p[i] = new Process(id,size,startaddress);
             for(int j=startaddress;j<startaddress+size;j++){
@@ -23,10 +23,10 @@ public class Main{
     }
     public static void First_Fit(Scanner sc, int[] array_ram, E_process[] ep) {
         System.out.println("Enter number of processes you want to add:");
-        int a_p = sc.nextInt();
+        int a_p = checkNegativeInput(sc);
         for (int i = 0; i < a_p; i++) {
             System.out.print("Enter size of process" + (i + 1) + ":");
-            int size = sc.nextInt();
+            int size = checkNegativeInput(sc);
             int id = nextId++;
             ep[i] = new E_process(size, id);
         }
@@ -41,7 +41,7 @@ public class Main{
                 }
                 if (epIndex < a_p && count >= ep[epIndex].getsize()) {
                     for (int k = startAddress; k < startAddress + ep[epIndex].getsize(); k++) {
-                        array_ram[k] = ep[epIndex].getid(); // Update RAM array
+                        array_ram[k] = ep[epIndex].getid(); 
                     }
                     epIndex++;
                 } else {
@@ -55,10 +55,10 @@ public class Main{
     }
     public static void Best_Fit(Scanner sc,int id,int[] array_ram,E_process[] ep){
         System.out.print("Enter number of processes you want to add:");
-        int a_p = sc.nextInt();
+        int a_p = checkNegativeInput(sc);
         for(int i=0;i<a_p;i++){
             System.out.print("Enter size of process "+(i+1)+":");
-            int size = sc.nextInt();
+            int size = checkNegativeInput(sc);
             id = nextId++;
             ep[i] = new E_process(size,id);
         }
@@ -105,10 +105,10 @@ public class Main{
     }
     public static void Worst_fit(Scanner sc,int id,int[] array_ram,E_process[] ep){
         System.out.print("Enter number of processes you want to add:");
-        int a_p = sc.nextInt();
+        int a_p = checkNegativeInput(sc);
         for(int i=0;i<a_p;i++){
             System.out.print("Enter size of process "+(i+1)+":");
-            int size = sc.nextInt();
+            int size = checkNegativeInput(sc);
             id = nextId++;
             ep[i] = new E_process(size, id);
         }Map<Integer,Integer> available_blocks = new HashMap<Integer,Integer>();
@@ -197,18 +197,27 @@ public class Main{
         System.out.println("Number of free blocks: " + freeBlocks);
         System.out.println("Total free memory size: " + totalFreeSize);
     }
+    public static int checkNegativeInput(Scanner sc) {
+        int temp = sc.nextInt();
+        while (temp < 0) {
+            System.out.print("Input value is negative, please enter a non-negative value: ");
+            temp = sc.nextInt();
+        }
+        return temp;
+    }
+    
     public static void main(String[] args) {
         Process[] p = new Process[100];
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter size of your RAM:");
-        int size_of_ram = sc.nextInt();
+        int size_of_ram = checkNegativeInput(sc);
         final int[] array_ram = new int[size_of_ram];
         E_process[] ep = new E_process[100];
         System.out.print("Enter no. of pre-running processes:");
-        int pre_run_process = sc.nextInt();
+        int pre_run_process = checkNegativeInput(sc);
+        add_process(pre_run_process, p, array_ram, sc);
+        print_ram(array_ram);
         try{
-            add_process(pre_run_process, p, array_ram, sc);
-            print_ram(array_ram);
             while(true){
                 System.out.println("\n1)Allocation in First Fit");
                 System.out.println("2)Allocation in Best Fit");
@@ -218,7 +227,7 @@ public class Main{
                 System.out.println("6)Memory Fragmentation Analysis");
                 System.out.println("7)Exit");
                 System.out.print("Enter your choice:");
-                int choice = sc.nextInt();
+                int choice = checkNegativeInput(sc);
                 switch(choice){
                     case 1:
                         First_Fit(sc,array_ram,ep);
@@ -235,7 +244,7 @@ public class Main{
                         break;
                     case 5:
                         System.out.print("Enter process id to release memory:");
-                        int processId = sc.nextInt();
+                        int processId = checkNegativeInput(sc);
                         release_memory(processId, array_ram);
                         print_ram(array_ram);
                         break;
