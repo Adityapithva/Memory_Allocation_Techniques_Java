@@ -197,6 +197,14 @@ public class Main{
         System.out.println("Number of free blocks: " + freeBlocks);
         System.out.println("Total free memory size: " + totalFreeSize);
     }
+    public static int checkRam(Scanner sc){
+        int temp = sc.nextInt();
+        while(temp <= 0){
+            System.out.print("Ram size must be greater than 0,please try again:");
+            temp = sc.nextInt();
+        }
+        return temp;
+    }
     public static int checkNegativeInput(Scanner sc) {
         int temp = sc.nextInt();
         while (temp < 0) {
@@ -210,7 +218,7 @@ public class Main{
         Process[] p = new Process[100];
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter size of your RAM:");
-        int size_of_ram = checkNegativeInput(sc);
+        int size_of_ram = checkRam(sc);
         final int[] array_ram = new int[size_of_ram];
         E_process[] ep = new E_process[100];
         System.out.print("Enter no. of pre-running processes:");
