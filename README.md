@@ -1,4 +1,4 @@
-Memory Management System
+Memory Management Simulation
 
 This Java program is a simple memory management system that demonstrates three different allocation strategies: First Fit, Best Fit, and Worst Fit. It allows users to allocate, release, and analyze memory fragmentation within a simulated RAM environment.
 
