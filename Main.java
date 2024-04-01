@@ -11,7 +11,12 @@ public class Main{
             int id = nextId++;
             p[i] = new Process(id,size,startaddress);
             for(int j=startaddress;j<startaddress+size;j++){
-                array_ram[j] = id;
+                if(array_ram[j] != 0){
+                    System.out.println("This space is already occupied by another process...!");
+                    break;
+                }else{
+                    array_ram[j] = id;
+                }
             }
         }
     }
@@ -164,10 +169,17 @@ public class Main{
         }
     }
     public static void release_memory(int processId,int[] array_ram){
+        boolean success = false;
         for(int i=0;i<array_ram.length;i++){
             if(array_ram[i] == processId){
                 array_ram[i] = 0;
+                success = true;
             }
+        }
+        if(success){
+            System.out.println("Memory released successfully...!");
+        }else{
+            System.out.println("Could not find process with id " + processId);
         }
     }
     public static void analyzeFragmentation(int[] array_ram){
@@ -217,60 +229,76 @@ public class Main{
     public static void main(String[] args) {
         Process[] p = new Process[100];
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter size of your RAM:");
-        int size_of_ram = checkRam(sc);
-        final int[] array_ram = new int[size_of_ram];
-        E_process[] ep = new E_process[100];
-        System.out.print("Enter no. of pre-running processes:");
-        int pre_run_process = checkNegativeInput(sc);
-        add_process(pre_run_process, p, array_ram, sc);
-        print_ram(array_ram);
-        try{
-            while(true){
-                System.out.println("\n1)Allocation in First Fit");
-                System.out.println("2)Allocation in Best Fit");
-                System.out.println("3)Allocation in Worst Fit");
-                System.out.println("4)Compact Memory");
-                System.out.println("5)Release Memory for Process");
-                System.out.println("6)Memory Fragmentation Analysis");
-                System.out.println("7)Exit");
-                System.out.print("Enter your choice:");
-                int choice = checkNegativeInput(sc);
-                switch(choice){
-                    case 1:
-                        First_Fit(sc,array_ram,ep);
+        boolean exit = false;
+        
+        while (!exit) {
+            try {
+                System.out.print("Enter size of your RAM:");
+                int size_of_ram = checkRam(sc);
+                final int[] array_ram = new int[size_of_ram];
+                E_process[] ep = new E_process[100];
+                System.out.print("Enter no. of pre-running processes:");
+                int pre_run_process = checkNegativeInput(sc);
+                add_process(pre_run_process, p, array_ram, sc);
+                print_ram(array_ram);
+    
+                while (true) {
+                    System.out.println("\n1)Allocation in First Fit");
+                    System.out.println("2)Allocation in Best Fit");
+                    System.out.println("3)Allocation in Worst Fit");
+                    System.out.println("4)Compact Memory");
+                    System.out.println("5)Release Memory for Process");
+                    System.out.println("6)Memory Fragmentation Analysis");
+                    System.out.println("7)Exit");
+                    System.out.print("Enter your choice:");
+                    int choice = checkNegativeInput(sc);
+                    
+                    switch (choice) {
+                        case 1:
+                            First_Fit(sc, array_ram, ep);
+                            break;
+                        case 2:
+                            Best_Fit(sc, choice, array_ram, ep);
+                            break;
+                        case 3:
+                            Worst_fit(sc, choice, array_ram, ep);
+                            break;
+                        case 4:
+                            compact_memory(array_ram);
+                            print_ram(array_ram);
+                            break;
+                        case 5:
+                            System.out.print("Enter process id to release memory:");
+                            int processId = checkNegativeInput(sc);
+                            release_memory(processId, array_ram);
+                            print_ram(array_ram);
+                            break;
+                        case 6:
+                            analyzeFragmentation(array_ram);
+                            break;
+                        case 7:
+                            exit = true;
+                            break;
+                        default:
+                            System.out.println("Invalid choice");
+                            break;
+                    }
+                    
+                    if (exit) {
                         break;
-                    case 2:
-                        Best_Fit(sc, choice, array_ram, ep);
-                        break;
-                    case 3:
-                    Worst_fit(sc, choice, array_ram, ep);
-                        break;
-                    case 4:
-                        compact_memory(array_ram);
-                        print_ram(array_ram);
-                        break;
-                    case 5:
-                        System.out.print("Enter process id to release memory:");
-                        int processId = checkNegativeInput(sc);
-                        release_memory(processId, array_ram);
-                        print_ram(array_ram);
-                        break;
-                    case 6:
-                        analyzeFragmentation(array_ram);
-                        break;
-                    case 7:
-                        System.exit(0);
-                        break;
-                    default:
-                        System.out.println("Invalid choice");
-                        break;
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("An error occurred: " + e.getMessage());
+                System.out.println("Do you want to retry the operation? (yes/no)");
+                String retryChoice = sc.next();
+                if (!retryChoice.equalsIgnoreCase("yes")) {
+                    exit = true;
                 }
             }
-        }catch(Exception e){
-            System.out.println("An error occured :"+e.getMessage());
-        }finally{
-            sc.close();
         }
+        
+        sc.close();
     }
+    
 }
