@@ -6,8 +6,8 @@ public class Main{
     public static void add_process(int pre_run_process,Process[] p,int[] array_ram,Scanner sc){
         for(int i=0;i<pre_run_process;i++){
             System.out.println("Enter details of process "+(i+1)+" (size,start_address):");
-            int size = checkNegativeInput(sc);
-            int startaddress = checkNegativeInput(sc);
+            Short size = (short) checkNegativeInput(sc);
+            Short startaddress = (short) checkNegativeInput(sc);
             int id = nextId++;
             p[i] = new Process(id,size,startaddress);
             for(int j=startaddress;j<startaddress+size;j++){
@@ -28,18 +28,18 @@ public class Main{
     }
     public static void First_Fit(Scanner sc, int[] array_ram, E_process[] ep) {
         System.out.println("Enter number of processes you want to add:");
-        int a_p = checkNegativeInput(sc);
+        Short a_p = (short) checkNegativeInput(sc);
         for (int i = 0; i < a_p; i++) {
             System.out.print("Enter size of process" + (i + 1) + ":");
-            int size = checkNegativeInput(sc);
+            Short size = (short) checkNegativeInput(sc);
             int id = nextId++;
             ep[i] = new E_process(size, id);
         }
-        int epIndex = 0;
-        for (int j = 0; j < array_ram.length; j++) {
+        Short epIndex = 0;
+        for (Short j = 0; j < array_ram.length; j++) {
             if (array_ram[j] == 0) {
-                int count = 0;
-                int startAddress = j;
+                Short count = 0;
+                Short startAddress = j;
                 while (epIndex < a_p && j < array_ram.length && array_ram[j] == 0 && count < ep[epIndex].getsize()) {
                     count++;
                     j++;
@@ -60,10 +60,10 @@ public class Main{
     }
     public static void Best_Fit(Scanner sc,int id,int[] array_ram,E_process[] ep){
         System.out.print("Enter number of processes you want to add:");
-        int a_p = checkNegativeInput(sc);
+        Short a_p = (short) checkNegativeInput(sc);
         for(int i=0;i<a_p;i++){
             System.out.print("Enter size of process "+(i+1)+":");
-            int size = checkNegativeInput(sc);
+            Short size = (short) checkNegativeInput(sc);
             id = nextId++;
             ep[i] = new E_process(size,id);
         }
@@ -110,7 +110,7 @@ public class Main{
     }
     public static void Worst_fit(Scanner sc,int id,int[] array_ram,E_process[] ep){
         System.out.print("Enter number of processes you want to add:");
-        int a_p = checkNegativeInput(sc);
+        Short a_p = (short) checkNegativeInput(sc);
         for(int i=0;i<a_p;i++){
             System.out.print("Enter size of process "+(i+1)+":");
             int size = checkNegativeInput(sc);
@@ -158,7 +158,7 @@ public class Main{
         return worstFitStart;
     }
     public static void compact_memory(int[] array_ram){
-        int id = 0;
+        Short id = 0;
         for(int i=0;i<array_ram.length;i++){
             if(array_ram[i]!=0){
                 array_ram[id++] = array_ram[i];
@@ -210,18 +210,18 @@ public class Main{
         System.out.println("Total free memory size: " + totalFreeSize);
     }
     public static int checkRam(Scanner sc){
-        int temp = sc.nextInt();
+        Short temp = (short) sc.nextInt();
         while(temp <= 0){
             System.out.print("Ram size must be greater than 0,please try again:");
-            temp = sc.nextInt();
+            temp = (short) sc.nextInt();
         }
         return temp;
     }
     public static int checkNegativeInput(Scanner sc) {
-        int temp = sc.nextInt();
+        Short temp = (short) sc.nextInt();
         while (temp < 0) {
             System.out.print("Input value is negative, please enter a non-negative value: ");
-            temp = sc.nextInt();
+            temp = (short) sc.nextInt();
         }
         return temp;
     }
@@ -233,11 +233,11 @@ public class Main{
         while (!exit) {
             try {
                 System.out.print("Enter size of your RAM:");
-                int size_of_ram = checkRam(sc);
+                Short size_of_ram = (short) checkRam(sc);
                 final int[] array_ram = new int[size_of_ram];
                 E_process[] ep = new E_process[100];
                 System.out.print("Enter no. of pre-running processes:");
-                int pre_run_process = checkNegativeInput(sc);
+                Short pre_run_process = (short) checkNegativeInput(sc);
                 add_process(pre_run_process, p, array_ram, sc);
                 print_ram(array_ram);
                 while (true) {
