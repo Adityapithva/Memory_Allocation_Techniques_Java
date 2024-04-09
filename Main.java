@@ -230,7 +230,6 @@ public class Main{
         Process[] p = new Process[100];
         Scanner sc = new Scanner(System.in);
         boolean exit = false;
-        
         while (!exit) {
             try {
                 System.out.print("Enter size of your RAM:");
@@ -241,7 +240,6 @@ public class Main{
                 int pre_run_process = checkNegativeInput(sc);
                 add_process(pre_run_process, p, array_ram, sc);
                 print_ram(array_ram);
-    
                 while (true) {
                     System.out.println("\n1)Allocation in First Fit");
                     System.out.println("2)Allocation in Best Fit");
@@ -252,7 +250,6 @@ public class Main{
                     System.out.println("7)Exit");
                     System.out.print("Enter your choice:");
                     int choice = checkNegativeInput(sc);
-                    
                     switch (choice) {
                         case 1:
                             First_Fit(sc, array_ram, ep);
@@ -283,22 +280,19 @@ public class Main{
                             System.out.println("Invalid choice");
                             break;
                     }
-                    
-                    if (exit) {
+                    if(exit){
                         break;
                     }
                 }
-            } catch (Exception e) {
+            }catch(Exception e) {
                 System.out.println("An error occurred: " + e.getMessage());
-                System.out.println("Do you want to retry the operation? (yes/no)");
+                System.out.print("Do you want to retry the operation? (yes/no)");
                 String retryChoice = sc.next();
                 if (!retryChoice.equalsIgnoreCase("yes")) {
                     exit = true;
                 }
             }
-        }
-        
+        }   
         sc.close();
     }
-    
 }
