@@ -1,19 +1,19 @@
 public class Process {
-    private int id;
-    private int size;
-    private int startAddress;
-    public Process(int id, int size, int startAddress) {
+    private Short id;
+    private Short size;
+    private Short startAddress;
+    public Process(Short id, Short size, Short startAddress) {
         this.id = id;
         this.size = size;
         this.startAddress = startAddress;
     }
-    public int getId() {
+    public Short getId() {
         return id;
     }
-    public int getSize() {
+    public Short getSize() {
         return size;
     }
-    public int getStartAddress() {
+    public Short getStartAddress() {
         return startAddress;
     }
 }

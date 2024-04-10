@@ -1,14 +1,14 @@
 public class E_process{
-    private int size;
-    private int id;
-    public E_process(int size,int id){
+    private Short size;
+    private Short id;
+    public E_process(Short size,Short id){
         this.size = size;
         this.id = id;
     }
-    public int getsize(){
+    public Short getsize(){
         return size;
     }
-    public int getid(){
+    public Short getid(){
         return id;
     }
 }
