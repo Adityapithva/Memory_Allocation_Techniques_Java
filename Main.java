@@ -1,8 +1,11 @@
 import java.util.Scanner;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Queue;
+import java.util.LinkedList;
 public class Main{
     public static Short nextId = 1;
+    public static Queue<E_process> waitingQueue = new LinkedList<E_process>();
     public static void add_process(int pre_run_process,Process[] p,int[] array_ram,Scanner sc){
         for(Short i=0;i<pre_run_process;i++){
             System.out.println("Enter details of process "+(i+1)+" (size,start_address):");
@@ -58,6 +61,7 @@ public class Main{
                 }
             }
             if (!allocated) {
+                waitingQueue.add(ep[i]);
                 System.out.println("Memory allocation failed for process " + ep[i].getid() + ". No suitable block available");
             }
         }
@@ -100,6 +104,7 @@ public class Main{
                 }
                 available_blocks.remove(allocateStart);
             } else {
+                waitingQueue.add(ep[i]);
                 System.out.println("Memory allocation failed for process " + ep[i].getid() + ". No suitable block is available");
             }
         }
@@ -136,6 +141,7 @@ public class Main{
                     array_ram[j] = ep[i].getid();
                 }
             } else {
+                waitingQueue.add(ep[i]);
                 System.out.println("Memory allocation failed for process "+ep[i].getid()+". No suitable block available");
             }
         }
@@ -160,22 +166,19 @@ public class Main{
                 currentBlockSize = 0;
             }
         }
-        // Check if the last block is the worst fit
         if(currentBlockSize > worstFitSize){
             worstFitSize = currentBlockSize;
             worstFitStart = array_ram.length - currentBlockSize;
         }
-    
         if(worstFitSize >= processSize){
             return worstFitStart;
         } else {
-            return -1; // No suitable block available
+            return -1;
         }
     }
-    
-    public static void compact_memory(int[] array_ram){
+    public static void compact_memory(int[] array_ram,Queue<E_process> waitingQueue){
         Short id = 0;
-        for(int i=0;i<array_ram.length;i++){
+        for(Short i=0;i<array_ram.length;i++){
             if(array_ram[i]!= 0){
                 array_ram[id++] = array_ram[i];
             }
@@ -183,8 +186,36 @@ public class Main{
         for(Short i=id;i<array_ram.length;i++){
             array_ram[i] = 0;
         }
+        while(!waitingQueue.isEmpty()){
+            E_process temp =  waitingQueue.poll();
+            // Now, find a suitable place in RAM to allocate the process
+            boolean allocated = false;
+            for(Short j=0; j<array_ram.length; j++){
+                if(array_ram[j] == 0){
+                    Short size = temp.getsize();
+                    boolean fits = true;
+                    for(Short k=j; k<j+size; k++){
+                        if(k >= array_ram.length || array_ram[k] != 0){
+                            fits = false;
+                            break;
+                        }
+                    }
+                    if(fits){
+                        for(Short k=j; k<j+size; k++){
+                            array_ram[k] = temp.getid();
+                        }
+                        allocated = true;
+                        break;
+                    }
+                }
+            }
+            if(!allocated){
+                waitingQueue.add(temp);
+            }
+        }
+        print_ram(array_ram);
     }
-    public static void release_memory(int processId,int[] array_ram){
+    public static void release_memory(int processId,int[] array_ram,Queue<E_process> waitingQueue){
         boolean success = false;
         for(Short i=0;i<array_ram.length;i++){
             if(array_ram[i] == processId){
@@ -197,6 +228,33 @@ public class Main{
         }else{
             System.out.println("Could not find process with id " + processId);
         }
+        while (!waitingQueue.isEmpty()) {
+            E_process temp = waitingQueue.poll();
+            boolean allocated = false;
+            for (Short j = 0; j < array_ram.length; j++) {
+                if (array_ram[j] == 0) {
+                    Short size = temp.getsize();
+                    boolean fits = true;
+                    for (Short k = j; k < j + size; k++) {
+                        if (k >= array_ram.length || array_ram[k] != 0) {
+                            fits = false;
+                            break;
+                        }
+                    }
+                    if (fits) {
+                        for (Short k = j; k < j + size; k++) {
+                            array_ram[k] = temp.getid();
+                        }
+                        allocated = true;
+                        break;
+                    }
+                }
+            }
+            if (!allocated) {
+                waitingQueue.add(temp);
+            }
+        }
+        print_ram(array_ram);
     }
     public static void analyzeFragmentation(int[] array_ram){
         int freeBlocks = 0;
@@ -277,14 +335,12 @@ public class Main{
                             Worst_fit(sc, choice, array_ram, ep);
                             break;
                         case 4:
-                            compact_memory(array_ram);
-                            print_ram(array_ram);
+                            compact_memory(array_ram,waitingQueue);
                             break;
                         case 5:
                             System.out.print("Enter process id to release memory:");
                             Short processId = checkNegativeInput(sc);
-                            release_memory(processId, array_ram);
-                            print_ram(array_ram);
+                            release_memory(processId, array_ram,waitingQueue);
                             break;
                         case 6:
                             analyzeFragmentation(array_ram);
