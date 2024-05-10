@@ -63,6 +63,7 @@ public class Main{
             if (!allocated) {
                 waitingQueue.add(ep[i]);
                 System.out.println("Memory allocation failed for process " + ep[i].getid() + ". No suitable block available");
+                System.out.println("Process "+ ep[i].getid()+" added to the waiting queue");
             }
         }
         print_ram(array_ram);
@@ -106,6 +107,7 @@ public class Main{
             } else {
                 waitingQueue.add(ep[i]);
                 System.out.println("Memory allocation failed for process " + ep[i].getid() + ". No suitable block is available");
+                System.out.println("Process "+ ep[i].getid()+" added to the waiting queue");
             }
         }
         print_ram(array_ram);
@@ -143,6 +145,7 @@ public class Main{
             } else {
                 waitingQueue.add(ep[i]);
                 System.out.println("Memory allocation failed for process "+ep[i].getid()+". No suitable block available");
+                System.out.println("Process "+ ep[i].getid()+" added to the waiting queue");
             }
         }
         print_ram(array_ram);
