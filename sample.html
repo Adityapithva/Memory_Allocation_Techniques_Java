@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Bar</title>
+    <style>
+        body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #3B5998;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.profile {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-pic {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.name {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+nav ul li {
+    width: 100%;
+    margin: 10px 0;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    width: 100%;
+    transition: background 0.3s;
+}
+
+nav ul li a:hover,
+nav ul li.active a {
+    background-color: #5D77A9;
+    border-radius: 0 25px 25px 0;
+}
+
+nav ul li a i {
+    margin-right: 10px;
+}
+
+/* Icons can be represented by adding a class for each icon */
+.icon-home::before { content: "🏠"; }
+.icon-statistics::before { content: "📊"; }
+.icon-messages::before { content: "✉️"; }
+.icon-profile::before { content: "👤"; }
+.icon-billings::before { content: "💳"; }
+.icon-calendar::before { content: "📅"; }
+.icon-settings::before { content: "⚙️"; }
+.icon-logout::before { content: "🔓"; }
+
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="profile">
+            <img src="profile-pic.jpg" alt="Profile Picture" class="profile-pic">
+            <p class="name">Mike Ross</p>
+        </div>
+        <nav>
+            <ul>
+                <li class="active"><a href="#"><i class="icon-home"></i> Home</a></li>
+                <li><a href="#"><i class="icon-statistics"></i> Statistics</a></li>
+                <li><a href="#"><i class="icon-messages"></i> Messages</a></li>
+                <li><a href="#"><i class="icon-profile"></i> Profile</a></li>
+                <li><a href="#"><i class="icon-billings"></i> Billings</a></li>
+                <li><a href="#"><i class="icon-calendar"></i> Calendar</a></li>
+                <li><a href="#"><i class="icon-settings"></i> Settings</a></li>
+                <li><a href="#"><i class="icon-logout"></i> Log out</a></li>
+            </ul>
+        </nav>
+    </div>
+</body>
+</html>
