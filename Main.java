@@ -247,34 +247,7 @@ public class Main {
         for (Short i = id; i < array_ram.length; i++) {
             array_ram[i] = 0;
         }
-        // Allocate memory for waiting processes
-        while (!waitingQueue.isEmpty()) {
-            E_process temp = waitingQueue.poll();
-            boolean allocated = false;
-            for (Short j = 0; j < array_ram.length; j++) {
-                if (array_ram[j] == 0) {
-                    Short size = temp.getsize();
-                    boolean fits = true;
-                    for (Short k = j; k < j + size; k++) {
-                        if (k >= array_ram.length || array_ram[k] != 0) {
-                            fits = false;
-                            break;
-                        }
-                    }
-                    if (fits) {
-                        for (Short k = j; k < j + size; k++) {
-                            array_ram[k] = temp.getid();
-                        }
-                        allocated = true;
-                        break;
-                    }
-                }
-            }
-            if (!allocated) {
-                waitingQueue.add(temp);
-            }
-        }
-        print_ram(array_ram);
+        allocateFromQueue(array_ram, waitingQueue);
     }
 
     /**
@@ -297,7 +270,9 @@ public class Main {
         } else {
             System.out.println("Could not find process with id " + processId);
         }
-        // Allocate memory for waiting processes
+        allocateFromQueue(array_ram, waitingQueue);
+    }
+    private static void allocateFromQueue(int[] array_ram,Queue<E_process> waitingQueue){
         while (!waitingQueue.isEmpty()) {
             E_process temp = waitingQueue.poll();
             boolean allocated = false;
@@ -322,11 +297,11 @@ public class Main {
             }
             if (!allocated) {
                 waitingQueue.add(temp);
+                break;
             }
         }
         print_ram(array_ram);
     }
-
     /**
      * Analyzes memory fragmentation by counting free blocks and total free memory.
      * @param array_ram RAM array.
